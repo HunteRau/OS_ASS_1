@@ -11,9 +11,10 @@ package SchedulerDriver;
  */
 
 public class Request {
-    public int agentID;
+    public String agent;
     public reqType rORc;
     public seatType type;
     public int seatNum;
+    public int arrivalTime;
     
 }
