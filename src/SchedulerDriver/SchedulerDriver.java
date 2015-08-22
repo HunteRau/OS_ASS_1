@@ -15,14 +15,20 @@ public class SchedulerDriver {
     }
     
     static void readIn(){
-        try{
-	    BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-	    String s = bufferRead.readLine();
-            //test for empty string
-            Request r = strToReq(s);
-            //do something with r
-	}catch(IOException e){
+	boolean done = false;
+	while(!done){
+	    try{
+		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+		String s = bufferRead.readLine();
+		if(s.isEmpty()){
+		    done = true;
+		}else{
+		    Request r = strToReq(s);
+		//do something with r
+		}
+	    }catch(IOException e){
 		System.exit(1);
+	    }
 	}
     }
     
