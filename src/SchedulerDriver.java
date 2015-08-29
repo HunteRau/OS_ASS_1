@@ -3,62 +3,47 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author Hayden & Aaron
  */
 public class SchedulerDriver {
-    public static void main(String args[]){
-        readIn();
-    }
     
-    static void readIn(){
-	boolean done = false;
-	while(!done){
-	    try{
-		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-		String s = bufferRead.readLine();
-		if(s.isEmpty()){
-		    done = true;
-		}else{
-		    Request r = strToReq(s);
-		//do something with r
-		}
-	    }catch(IOException e){
-		System.exit(1);
-	    }
+    static List<Request> input;
+    
+    public static void main(String args[]){
+	input = new ArrayList<Request>();
+	String fName = "";
+	if(args.length<1){
+	    System.exit(1);
+	}else{
+	    fName = args[0];
+	}
+        readIn(fName);
+	for (Request r : input) {
+	    System.out.println(r.toString());
+	}
+	Collections.sort(input,new RequestComparator());
+	System.out.println("---------------------------------------");
+	for (Request r : input) {
+	    System.out.println(r.toString());
 	}
     }
     
-    static Request strToReq(String s){
-	String tokens[] = s.split(" ");
-        Request r = new Request();
-        r.agent = tokens[0];
-        switch(tokens[1]){
-            case "R":
-                r.rORc = reqType.REQUEST;
-                break;
-            case "C":
-                r.rORc = reqType.CANCEL;
-                break;
-        }
-        switch(tokens[2]){
-            case "F":
-                r.type = seatType.FIRST;
-                break;
-            case "B":
-                r.type = seatType.BUSINESS;
-                break;
-            case "E":
-                r.type = seatType.ECONOMY;
-                break;
-        }
-        r.seatNum = Integer.parseInt(tokens[3]);
-        r.arrivalTime = Integer.parseInt(tokens[4]);
-        return r;
+    static void readIn(String fileName){
+	try{
+	    BufferedReader bufferRead = new BufferedReader(new FileReader(fileName));
+	    String s;
+	    while((s = bufferRead.readLine()) != null){
+		Request r = new Request(s);
+		input.add(r);
+	    }
+	}catch(IOException e){
+	    System.exit(1);
+	}
     }
-    
-    
 }
