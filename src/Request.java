@@ -19,7 +19,7 @@ public class Request{
     public int arrivalTime;
     
     public Request(String s){	
-	String tokens[] = s.split(" ");
+		String tokens[] = s.split(" ");
         agent = tokens[0];
         switch(tokens[1]){
             case "R":
@@ -45,48 +45,48 @@ public class Request{
     }
     
     public boolean equals(Object obj){
-	if(!(obj instanceof Request)){
-	    return false;
+		if(!(obj instanceof Request)){
+			return false;
+		}
+		if(obj==this){
+			return true;
+		}
+		Request rhs = (Request) obj;
+		if(this.agent.equals(rhs.agent) && this.arrivalTime==rhs.arrivalTime &&
+			this.rORc.equals(rhs.rORc) && this.seatNum==rhs.seatNum &&
+			this.type.equals(rhs.type)){
+			return true;
+		}else{
+			return false;
+		}
 	}
-	if(obj==this){
-	    return true;
+		
+	public int hashCode(){
+		return agent.hashCode()+arrivalTime+rORc.hashCode()+seatNum+type.hashCode();
 	}
-	Request rhs = (Request) obj;
-	if(this.agent.equals(rhs.agent) && this.arrivalTime==rhs.arrivalTime &&
-		this.rORc.equals(rhs.rORc) && this.seatNum==rhs.seatNum &&
-		this.type.equals(rhs.type)){
-	    return true;
-	}else{
-	    return false;
-	}
-    }
-    
-    public int hashCode(){
-	return agent.hashCode()+arrivalTime+rORc.hashCode()+seatNum+type.hashCode();
-    }
-    
-    public String toString(){
-	String ans = "";
-	ans = ans.concat(agent);
-	if(rORc == reqType.CANCEL){
-	    ans = ans.concat(" C");
-	}else{
-	    ans = ans.concat(" R");
-	}
-	switch(type){
-	    case FIRST:
-		ans = ans.concat(" F");
-		break;
-	    case BUSINESS:
-		ans = ans.concat(" B");
-		break;
-	    case ECONOMY:
-		ans = ans.concat(" E");	    
-		break;
-	}
-	ans = ans.concat(" " + Integer.toString(seatNum));
-	ans = ans.concat(" " + Integer.toString(arrivalTime));
-	return ans;
+		
+	public String toString(){
+		String ans = "";
+		ans = ans.concat(agent);
+		if(rORc == reqType.CANCEL){
+			ans = ans.concat(" C");
+		}else{
+			ans = ans.concat(" R");
+		}
+		switch(type){
+			case FIRST:
+			ans = ans.concat(" F");
+			break;
+			case BUSINESS:
+			ans = ans.concat(" B");
+			break;
+			case ECONOMY:
+			ans = ans.concat(" E");	    
+			break;
+		}
+		ans = ans.concat(" " + Integer.toString(seatNum));
+		ans = ans.concat(" " + Integer.toString(arrivalTime));
+		return ans;
     }
     
 }

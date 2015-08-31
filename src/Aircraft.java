@@ -1,11 +1,16 @@
+/**
+ *
+ * @author Aaron
+ */
+ 
 class Aircraft {
-	int firstClassSeats;
-	int businessClassSeats;
-	int ecoClassSeats;
+	private int firstClassSeats;
+	private int businessClassSeats;
+	private int ecoClassSeats;
 	
-	int firstClassSeatsFilled;
-	int businessClassSeatsFilled;
-	int ecoClassSeatsFilled;
+	private int firstClassSeatsFilled;
+	private int businessClassSeatsFilled;
+	private int ecoClassSeatsFilled;
 	
 	public Aircraft(int numFirstClass, int numBusinessClass, int numEcoClass) {
 		firstClassSeats = numFirstClass;
@@ -13,7 +18,17 @@ class Aircraft {
 		ecoClassSeats = numEcoClass;
 	}
 	
-	boolean reserve(seatType type) {
+	public int seatsNotTaken(seatType type) {
+		if (type == seatType.FIRST) {
+			return firstClassSeats - firstClassSeatsFilled;
+		} else if (type == seatType.BUSINESS) {
+			return businessClassSeats -	businessClassSeatsFilled;
+		} else {
+			return ecoClassSeats - ecoClassSeatsFilled;
+		}
+	}
+	
+	public boolean reserve(seatType type) {
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled < firstClassSeats) {
 				firstClassSeats++;
@@ -33,7 +48,7 @@ class Aircraft {
 		return false;
 	}
 	
-	boolean reserve(seatType type, int numOfSeats) {
+	public boolean reserve(seatType type, int numOfSeats) {
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled + numOfSeats <= firstClassSeats) {
 				firstClassSeats = numOfSeats + firstClassSeats;
@@ -53,7 +68,7 @@ class Aircraft {
 		return false;	
 	}
 	
-	void cancel(seatType type) {
+	public void cancel(seatType type) {
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled > 0) {
 				firstClassSeatsFilled--;
@@ -69,7 +84,7 @@ class Aircraft {
 		}
 	}
 	
-	void cancel(seatType type, int numOfSeats) {
+	public void cancel(seatType type, int numOfSeats) {
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled - numOfSeats >= 0) {
 				firstClassSeatsFilled--;
