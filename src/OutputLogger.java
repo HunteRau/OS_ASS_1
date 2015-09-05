@@ -1,10 +1,13 @@
+
+import java.util.List;
+
 /**
  *
  * @author Aaron
  */
  
  class OutputLogger {
-	public void logAdmitBatch(list<Request> requests) {
+	public void logAdmitBatch(List<Request> requests) {
 		// create a string first
 		StringBuilder builder = new StringBuilder();
 		for (Request  r : requests) {
@@ -14,7 +17,7 @@
 		System.out.println("Admit a batch (" + builder.toString() + ")");
 	}
 	
-	builder.deleteCharAt(orgStr.length()-1);
+	//builder.deleteCharAt(orgStr.length()-1);
 	
 	public void logWaitOp(int agent, int semaphoreState) {
 		System.out.println("Agent " + Integer.toString(agent) 

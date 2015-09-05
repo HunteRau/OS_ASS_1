@@ -1,3 +1,7 @@
+
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,7 +19,7 @@ public class Queue {
 	private OutputLogger logger;
 	
 	public Queue(Aircraft ac, OutputLogger l) {
-		list = new List<Request>();
+		list = new ArrayList<Request>();
 		aircraft = ac;
 		logger = l;
 	}
@@ -29,8 +33,8 @@ public class Queue {
 	}
 	
 	private void pop() {
-		if (list.length() > 0) {
-			list.remove();
+		if (list.size() > 0) {
+			list.remove(0);
 		}
 	}
 	
@@ -48,18 +52,18 @@ public class Queue {
 		// find out what the next batch is
 		Request r0 = list.get(0);
 		
-		List<Request> offlineList = new List<Request>();
+		List<Request> offlineList = new ArrayList<Request>();
 		if (r0.rORc == reqType.REQUEST) {
 			// is there room?			
 			if (aircraft.seatsNotTaken(r0.type) < r0.seatNum) {
 				offlineList.add(r0);
 				
 				// is there more request we can fit in this batch
-				spareSeats = aircraft.seatsNotTaken(r0.type) - r0.seatNum;
+				int spareSeats = aircraft.seatsNotTaken(r0.type) - r0.seatNum;
 				int i = 1;
 				while (i < list.size() && spareSeats > 0) {
 					Request rx = list.get(i);
-					if (!(rx.rORc == r0.rROc && rx.reqType == r0.reqType)) {
+					if (!(rx.rORc == r0.rORc)) {
 						break;
 					}
 					spareSeats = spareSeats - rx.seatNum;
@@ -74,7 +78,7 @@ public class Queue {
 			int i = 1;
 			while (i < list.size()) {
 				Request rx = list.get(i);
-				if (!(rx.rORc == r0.rROc && rx.reqType == r0.reqType)) {
+				if (!(rx.rORc == r0.rORc)) {
 					break;
 				}				
 				offlineList.add(rx);

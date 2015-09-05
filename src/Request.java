@@ -12,15 +12,16 @@
 
 public class Request{
     
-    public String agent;
+    public int agent;
     public reqType rORc;
     public seatType type;
     public int seatNum;
     public int arrivalTime;
     
     public Request(String s){	
-		String tokens[] = s.split(" ");
-        agent = tokens[0];
+	String tokens[] = s.split(" ");
+	String temp = tokens[0];
+        agent = temp.charAt(temp.length()-1);
         switch(tokens[1]){
             case "R":
                 rORc = reqType.REQUEST;
@@ -52,7 +53,7 @@ public class Request{
 			return true;
 		}
 		Request rhs = (Request) obj;
-		if(this.agent.equals(rhs.agent) && this.arrivalTime==rhs.arrivalTime &&
+		if(this.agent == rhs.agent && this.arrivalTime==rhs.arrivalTime &&
 			this.rORc.equals(rhs.rORc) && this.seatNum==rhs.seatNum &&
 			this.type.equals(rhs.type)){
 			return true;
@@ -62,12 +63,13 @@ public class Request{
 	}
 		
 	public int hashCode(){
-		return agent.hashCode()+arrivalTime+rORc.hashCode()+seatNum+type.hashCode();
+		return agent+arrivalTime+rORc.hashCode()+seatNum+type.hashCode();
 	}
 		
 	public String toString(){
 		String ans = "";
-		ans = ans.concat(agent);
+		ans = ans.concat("Agent");
+		ans = ans.concat(Integer.toString(agent));
 		if(rORc == reqType.CANCEL){
 			ans = ans.concat(" C");
 		}else{
