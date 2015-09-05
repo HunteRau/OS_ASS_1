@@ -37,6 +37,9 @@ public class Signaler {
 	    threadQueue.get(0).notify();
 	    threadQueue.remove(0);
 	}
+	if(sigNum>1){
+	    sigNum=1;
+	}
 	return sigNum;
     }
     
