@@ -18,6 +18,9 @@ import java.util.List;
 public class SchedulerDriver {
     
     static List<Request> input;
+    static Aircraft ac = new Aircraft(10,20,70);
+    static OutputLogger ol = new OutputLogger();
+    static Queue q = new Queue(ac,ol);
     
     public static void main(String args[]){
 		input = new ArrayList<Request>();
@@ -28,14 +31,37 @@ public class SchedulerDriver {
 			fName = args[0];
 		}
 		readIn(fName);
-		for (Request r : input) {
-			System.out.println(r.toString());
+		printLists();
+		
+		tickLoop();
+		
+    }
+    
+    static void tickLoop(){
+	int tickNum = 0;
+	while(q.size()!=0 || input.size()>0){
+	    for(int i=0;i<input.size();i++){
+		if(input.get(i).arrivalTime == tickNum){
+		    q.push(input.get(i));
+		    input.set(i, null);
 		}
-		Collections.sort(input,new RequestComparator());
-		System.out.println("---------------------------------------");
-		for (Request r : input) {
-			System.out.println(r.toString());
-		}
+	    }
+	    while(input.remove(null)){}
+	    if(!q.tick()){
+		break;
+	    }
+	}
+    }
+    
+    static void printLists(){	
+	for (Request r : input) {
+	    System.out.println(r.toString());
+	}
+	Collections.sort(input,new RequestComparator());
+	System.out.println("---------------------------------------");
+	for (Request r : input) {
+	    System.out.println(r.toString());
+	}
     }
     
     static void readIn(String fileName){

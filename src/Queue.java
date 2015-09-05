@@ -25,11 +25,12 @@ public class Queue {
 	}
 	
 	public void push(Request r) {
-		if (r.rORc == reqType.REQUEST) {
+		if (r.rORc == reqType.CANCEL) {
 			// push the cancel to the front of the queue
 			list.add(0, r);
+		}else{
+		    list.add(r);
 		}
-		list.add(r);
 	}
 	
 	private void pop() {
