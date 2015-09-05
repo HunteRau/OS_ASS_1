@@ -9,13 +9,13 @@
  * @author Aaron
  */
  
- class ProcessQueue extends Thread {
+ class ProcessThread extends Thread {
 	private Request request;
 	private Signaler signaler;
 	private OutputLogger logger;
     private Aircraft aircraft;
-	public ProcessThread(Request r, Aircraft a, Signaler s, OutputLogger l) {
-		this.request = Request(r);
+	public void ProcessThread(Request r, Aircraft a, Signaler s, OutputLogger l) {
+        this.request = new Request(r);
         this.signaler = s;
         this.logger = l;
         this.aircraft = a;
@@ -23,20 +23,22 @@
     
     public void run() {
         // ask to access the aircraft
-        int semNum;
-        logger.logWait(request.agent, semNum);
+        int simNum = signaler.Wait();
         
-        // decide on what to do
+        // process the request
         logger.logEnter(request.agent);
         if (request.rORc == reqType.REQUEST) {
-            aircraft.reserve(request.type, seatNum);
+            if (aircraft.reserve(request.type, seatNum)) 
+                logger.logRequest(request);
+            else
+                logger.logReservationFailure(request.agent);
         } else (request.rORc == reqType.CANCEL) {
             aircraft.cancel(request.type, seatNum);
+            logger.logRequest(request)
         }
         logger.logExit(request.agent);
         
         // signal exiting so others can come
-        semNum = signaler.signal();
-        logger.logSignal(
+        simNum = signaler.Signal();
     }
  }

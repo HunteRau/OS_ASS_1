@@ -15,14 +15,25 @@ import java.util.logging.Logger;
  */
 public class Signaler {
     
-    private int sigNum=0;
-    ArrayList<Thread> threadQueue = new ArrayList<Thread>();
+    private OutputLogger logger;
+    private int sigNum;
+    private List<Thread> threadQueue;
     
+    public Signaler(OutputLogger l) {
+        this.sigNum = 1;
+        this.logger = l;
+        threadQueue = Collections.synchronizedList(new ArrayList<Thread>());
+    }
     
-    public void Wait(){
-	sigNum--;
-	if(sigNum<=0){
-	    threadQueue.add(Thread.currentThread());
+    public synchronized void Wait(int agent){
+    synchronized (sigNum) {
+        sigNum--;
+    }
+    logger.logWait(agent, sigNum);
+	if(sigNum<0){
+        synchronized (threadQueue) {
+            threadQueue.add(Thread.currentThread());
+        }
 	    try {
 		Thread.currentThread().wait();
 	    } catch (InterruptedException ex) {
@@ -31,16 +42,24 @@ public class Signaler {
 	}
     }
     
-    public int Signal(){
-	sigNum++;
+    public synchronized void Signal(int agent){
+	synchronized (sigNum) {
+        if (sigNum < 1)
+            sigNum++;
+    }
+    logger.logSignal(agent, sigNum);
 	if(sigNum<=0){
-	    threadQueue.get(0).notify();
-	    threadQueue.remove(0);
+        synchronized (threadQueue) {
+            threadQueue.get(0).notify();
+            threadQueue.remove(0);
+        }
 	}
-	if(sigNum>1){
-	    sigNum=1;
-	}
-	return sigNum;
+    }
+    
+    public int sigNum() {
+        synchronized (sigNum) {
+            return sigNum;
+        }
     }
     
 }

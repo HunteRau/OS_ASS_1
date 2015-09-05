@@ -13,15 +13,20 @@ import java.util.List;
  * @author Aaron
  */
  
+// TODO:    - check to make sure that admit failures are logged
+//          - make sure that request that can't be processed are logged
+ 
 public class Queue {
 	private List<Request> list;
 	private Aircraft aircraft;
 	private OutputLogger logger;
+    private Signaler semaphore;
 	
 	public Queue(Aircraft ac, OutputLogger l) {
 		list = new ArrayList<Request>();
 		aircraft = ac;
 		logger = l;
+        semaphore = new Signaler(l);
 	}
 	
 	public void push(Request r) {
@@ -94,17 +99,24 @@ public class Queue {
 			logger.logAdmitBatch(offlineList);
 		}
 		
-		// as a single thread?
-		// EXECUTE ALL THE WAITS AND LOG ENTRY(loop)		
-		// REQUEST FROM AIRPLANE AND THEN SIGNAL AND THEN LOG EXIT loop)	
-		// POP REQUEST FROM QUEUE
-		
-		// as a multithread app
-		// EXECTURE ALL THE WAITS WHICH SPAWN A NEW THREAD
-		// THREAD PROCESSES THE REQUEST AND LOGS ENTRY/EXIT/SIGNAL
-		// WHEN ALL THREADS ARE FINISHED; POP PROCESSES AND FINISH TICK
-		
+        // create threads
+        List<RequestThread> threadList = new ArrayList<Request>();
+        for (Request r : offlineList) {
+            ProcessThread p = new ProcessThread(r, aircraft, semaphore, logger);
+            threadList.add(p);
+            p.start();
+        }
+        
+        // probably should change this to not be busy waiting
+        while (semaphore.sigNum() != 1) {
+            //no-op
+        }
+        
+        // pop requests completed requests from list
+        // could do this in a better manner
+        for (int i = 0; i < offlineList; i++) {
+            this.pop();
+        }       
 		return true;
-		//----------------
 	}
 }
