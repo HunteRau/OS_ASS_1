@@ -14,13 +14,13 @@ import java.util.List;
 			builder.append("Agent " + Integer.toString(r.agent) + ", ");
 		}
 		builder.delete(builder.length()-2, builder.length());
-		synchronize (this) {    
+		synchronized (this) {    
             System.out.println("Admit a batch (" + builder.toString() + ")");
         }
 	}
 	
 	public void logWaitOp(int agent, int semaphoreState) {
-        synchronize (this) {
+        synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
                 + "executes wait operation, semaphore = "
                 + Integer.toString(semaphoreState));
@@ -30,7 +30,7 @@ import java.util.List;
 	}
 	
 	public void logSignalOp(int agent, int semaphoreState) {
-        synchronize (this) {
+        synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
                 + "executes signal operation, semaphore = "
                 + Integer.toString(semaphoreState));
@@ -61,19 +61,19 @@ import java.util.List;
 		} else if (r.type == seatType.ECONOMY) {
 			builder.append("Economy-class");
 		}
-		synchronize (this) {
+		synchronized (this) {
             System.out.println(builder.toString());
         }
 	}
 	
 	public void logAdmitBatchFailure() {
-        synchronize (this) {
+        synchronized (this) {
             System.out.println("Cannot admit a batch");
         }
 	}
 	
 	public void logReservationFailure(int agent) {
-        synchronize (this) {
+        synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
                 + " cannot reserve any seats in this system");
         }
