@@ -57,7 +57,7 @@ public class Queue {
 		List<Request> offlineList = new ArrayList<Request>();
 		if (r0.rORc == reqType.REQUEST) {
 			// is there room?			
-			if (aircraft.seatsNotTaken(r0.type) < r0.seatNum) {
+			if (aircraft.seatsNotTaken(r0.type) >= r0.seatNum) {
 				offlineList.add(r0);
 				
 				// is there more request we can fit in this batch
@@ -65,7 +65,7 @@ public class Queue {
 				int i = 1;
 				while (i < list.size() && spareSeats > 0) {
 					Request rx = list.get(i);
-					if (!(rx.rORc == r0.rORc)) {
+					if (!(rx.rORc == r0.rORc && rx.type == r0.type)) {
 						break;
 					}
 					spareSeats = spareSeats - rx.seatNum;
