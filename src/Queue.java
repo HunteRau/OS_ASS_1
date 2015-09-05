@@ -46,8 +46,9 @@ public class Queue {
 	// return false if 0 requests are processed
 	public boolean tick() {
 		
-		if (list.size() == 0) 
+		if (list.isEmpty()){
 			return false;
+		}
 		
 		// find out what the next batch is
 		Request r0 = list.get(0);
@@ -86,10 +87,11 @@ public class Queue {
 		}
 		
 		// check if there is any requests to process
-		if (offlineList.size() == 0)
+		if (offlineList.isEmpty()){
 			return false;
-		else
+		}else{
 			logger.logAdmitBatch(offlineList);
+		}
 		
 		// as a single thread?
 		// EXECUTE ALL THE WAITS AND LOG ENTRY(loop)		
