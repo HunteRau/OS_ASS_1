@@ -21,7 +21,7 @@ public class Request{
     public Request(String s){	
 	String tokens[] = s.split(" ");
 	String temp = tokens[0];
-        agent = temp.charAt(temp.length()-1);
+        agent = Integer.parseInt(temp.substring(temp.length()-1));
         switch(tokens[1]){
             case "R":
                 rORc = reqType.REQUEST;

@@ -22,7 +22,7 @@ class Aircraft {
 		if (type == seatType.FIRST) {
 			return firstClassSeats - firstClassSeatsFilled;
 		} else if (type == seatType.BUSINESS) {
-			return businessClassSeats -	businessClassSeatsFilled;
+			return businessClassSeats - businessClassSeatsFilled;
 		} else {
 			return ecoClassSeats - ecoClassSeatsFilled;
 		}
