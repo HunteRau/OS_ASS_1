@@ -12,18 +12,15 @@ public class Signaler {
     
     private int sigNum=0;
     
-    public synchronized void Wait(){
+    public void Wait(){
+	sigNum--;
 	while(sigNum<=0){
 	    //noop
 	}
-	sigNum--;
     }
     
-    public synchronized void Signal(){
+    public int Signal(){
 	sigNum++;
-    }
-    
-    int getSigNum(){
 	return sigNum;
     }
     
