@@ -19,23 +19,33 @@ import java.util.List;
         }
 	}
 	
-	public void logWaitOp(int agent, int semaphoreState) {
+	public void logWait(int agent, int semaphoreState) {
         synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
                 + "executes wait operation, semaphore = "
                 + Integer.toString(semaphoreState));
-            System.out.println("Agent " + Integer.toString(agent) 
-                + " enters the system");
         }
 	}
+    
+    public void logEnter(int agent) {
+        synchronized (this) {
+            System.out.println("Agent " + Integer.toString(agent) 
+                    + " enters the system");
+        }            
+    }
+    
+    public void logExit(int agent) {
+        synchronized (this) {
+            System.out.println("Agent "+ Integer.toString(agent) 
+                + " exits the system");
+        }            
+    }
 	
-	public void logSignalOp(int agent, int semaphoreState) {
+	public void logSignal(int agent, int semaphoreState) {
         synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
                 + "executes signal operation, semaphore = "
                 + Integer.toString(semaphoreState));
-            System.out.println("Agent "+ Integer.toString(agent) 
-                + " exits the system");
         }
 	}
 	
