@@ -44,6 +44,14 @@ public class Request{
         seatNum = Integer.parseInt(tokens[3]);
         arrivalTime = Integer.parseInt(tokens[4]);
     }
+	
+	public Request(Request another) {
+        this.agent = another.agent;
+        this.rORc = another.rORc;
+        this.type = another.type;
+        this.seatNum = another.seatNum;
+        this.arrivalTime = another.arrivalTime;
+    }
     
     public boolean equals(Object obj){
 		if(!(obj instanceof Request)){

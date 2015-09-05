@@ -14,25 +14,29 @@ import java.util.List;
 			builder.append("Agent " + Integer.toString(r.agent) + ", ");
 		}
 		builder.delete(builder.length()-2, builder.length());
-		System.out.println("Admit a batch (" + builder.toString() + ")");
+		synchronize (this) {    
+            System.out.println("Admit a batch (" + builder.toString() + ")");
+        }
 	}
 	
-	//builder.deleteCharAt(orgStr.length()-1);
-	
 	public void logWaitOp(int agent, int semaphoreState) {
-		System.out.println("Agent " + Integer.toString(agent) 
-			+ "executes wait operation, semaphore = "
-			+ Integer.toString(semaphoreState));
-		System.out.println("Agent " + Integer.toString(agent) 
-			+ " enters the system");
+        synchronize (this) {
+            System.out.println("Agent " + Integer.toString(agent) 
+                + "executes wait operation, semaphore = "
+                + Integer.toString(semaphoreState));
+            System.out.println("Agent " + Integer.toString(agent) 
+                + " enters the system");
+        }
 	}
 	
 	public void logSignalOp(int agent, int semaphoreState) {
-		System.out.println("Agent " + Integer.toString(agent) 
-			+ "executes signal operation, semaphore = "
-			+ Integer.toString(semaphoreState));
-		System.out.println("Agent "+ Integer.toString(agent) 
-			+ " exits the system");
+        synchronize (this) {
+            System.out.println("Agent " + Integer.toString(agent) 
+                + "executes signal operation, semaphore = "
+                + Integer.toString(semaphoreState));
+            System.out.println("Agent "+ Integer.toString(agent) 
+                + " exits the system");
+        }
 	}
 	
 	public void logRequest(Request r) {
@@ -57,16 +61,22 @@ import java.util.List;
 		} else if (r.type == seatType.ECONOMY) {
 			builder.append("Economy-class");
 		}
-		System.out.println(builder.toString());
+		synchronize (this) {
+            System.out.println(builder.toString());
+        }
 	}
 	
 	public void logAdmitBatchFailure() {
-		System.out.println("Cannot admit a batch");
+        synchronize (this) {
+            System.out.println("Cannot admit a batch");
+        }
 	}
 	
 	public void logReservationFailure(int agent) {
-		System.out.println("Agent " + Integer.toString(agent) 
-			+ " cannot reserve any seats in this system");
+        synchronize (this) {
+            System.out.println("Agent " + Integer.toString(agent) 
+                + " cannot reserve any seats in this system");
+        }
 	}
  }
  
