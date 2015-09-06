@@ -37,6 +37,16 @@ public class Queue {
 		    list.add(r);
 		}
 	}
+    
+    public void logFailures() {
+        if (list.size() == 0)
+            return;
+            
+        logger.logAdmitBatchFailure();
+        for (Request r : list) {
+            logger.logReservationFailure(r.agent);
+        }
+    }
 	
 	private void pop() {
 		if (list.size() > 0) {
@@ -76,6 +86,7 @@ public class Queue {
 					spareSeats = spareSeats - rx.seatNum;
 					if (spareSeats >= 0)					
 						offlineList.add(rx);
+                    i++;
 				}
 			} 
 		} else if (r0.rORc == reqType.CANCEL) {
@@ -89,6 +100,7 @@ public class Queue {
 					break;
 				}				
 				offlineList.add(rx);
+                i++;
 			}
 		}
 		
@@ -107,14 +119,17 @@ public class Queue {
             p.start();
         }
         
-        // probably should change this to not be busy waiting
-        while (semaphore.sigNum() != 1) {
-            //no-op
+        for (ProcessThread p : threadList) {
+            try {
+                p.join();
+            } catch (InterruptedException e) {
+                System.out.println("Main thread Interrupted");
+            }
         }
-        
+ 
         // pop requests completed requests from list
         // could do this in a better manner
-        for (int i = 0; i < offlineList; i++) {
+        for (int i = 0; i < offlineList.size(); i++) {
             this.pop();
         }       
 		return true;

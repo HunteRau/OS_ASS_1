@@ -51,6 +51,9 @@ public class SchedulerDriver {
 		break;
 	    }
 	}
+    
+        // look at list and process left overs
+        q.logFailures();
     }
     
     static void printLists(){	
