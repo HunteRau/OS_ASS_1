@@ -31,17 +31,17 @@ class Aircraft {
 	public boolean reserve(seatType type) {
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled < firstClassSeats) {
-				firstClassSeats++;
+				firstClassSeatsFilled++;
 				return true;
 			}								
 		} else if (type == seatType.BUSINESS) {
 			if (businessClassSeatsFilled < businessClassSeats) {
-				businessClassSeats++;
+				businessClassSeatsFilled++;
 				return true;
 			}			
 		} else if (type == seatType.ECONOMY) {
 			if (ecoClassSeatsFilled < ecoClassSeats) {
-				ecoClassSeats++;
+				ecoClassSeatsFilled++;
 				return true;
 			}
 		}
@@ -51,17 +51,17 @@ class Aircraft {
 	public boolean reserve(seatType type, int numOfSeats) {
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled + numOfSeats <= firstClassSeats) {
-				firstClassSeats = numOfSeats + firstClassSeats;
+				firstClassSeatsFilled += numOfSeats;
 				return true;
 			}								
 		} else if (type == seatType.BUSINESS) {
 			if (businessClassSeatsFilled + numOfSeats <= businessClassSeats) {
-				businessClassSeats = numOfSeats + businessClassSeats;
+				businessClassSeatsFilled += numOfSeats;
 				return true;
 			}			
 		} else if (type == seatType.ECONOMY) {
 			if (ecoClassSeatsFilled + numOfSeats <= ecoClassSeats) {
-				ecoClassSeats = numOfSeats + ecoClassSeats;
+				ecoClassSeatsFilled += numOfSeats;
 				return true;
 			}
 		}
@@ -87,15 +87,15 @@ class Aircraft {
 	public void cancel(seatType type, int numOfSeats) {
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled - numOfSeats >= 0) {
-				firstClassSeatsFilled--;
+				firstClassSeatsFilled -= numOfSeats;
 			}								
 		} else if (type == seatType.BUSINESS) {
 			if (businessClassSeatsFilled - numOfSeats >= 0) {
-				businessClassSeatsFilled--;
+				businessClassSeatsFilled -= numOfSeats;
 			}			
 		} else if (type == seatType.ECONOMY) {
 			if (ecoClassSeatsFilled - numOfSeats >= 0) {
-				ecoClassSeatsFilled--;
+				ecoClassSeatsFilled -= numOfSeats;
 			}
 		}
 	}
