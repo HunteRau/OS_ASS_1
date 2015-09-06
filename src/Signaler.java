@@ -29,20 +29,23 @@ public class Signaler {
     }
     
     public synchronized void Wait(int agent){
-    synchronized (sigNum_lock) {
-        sigNum--;
-    }
-    logger.logWait(agent, sigNum);
-	if(sigNum<0){
-        synchronized (threadQueue) {
-            threadQueue.add(Thread.currentThread());
+        synchronized (sigNum_lock) {
+            sigNum--;
         }
-	    try {
-		Thread.currentThread().wait();
-	    } catch (InterruptedException ex) {
-		Logger.getLogger(Signaler.class.getName()).log(Level.SEVERE, null, ex);
-	    }
-	}
+        logger.logWait(agent, sigNum);
+        if(sigNum<0){
+            synchronized (threadQueue) {
+                threadQueue.add(Thread.currentThread());
+            }
+            synchronized(Thread.currentThread()){
+                try {
+                    Thread.currentThread().wait();
+                } catch (Exception ex) {
+                    Logger.getLogger(Signaler.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ex.getLocalizedMessage());
+                }
+            }
+        }
     }
     
     public synchronized void Signal(int agent){

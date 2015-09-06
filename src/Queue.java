@@ -110,9 +110,12 @@ public class Queue {
             p.start();
         }
         
-        // probably should change this to not be busy waiting
-        while (semaphore.sigNum() != 1) {
-            //no-op
+        for (ProcessThread p : threadList) {
+            try {
+                p.join();
+            } catch (InterruptedException e) {
+                System.out.println("Main thread Interrupted");
+            }
         }
         
         // pop requests completed requests from list

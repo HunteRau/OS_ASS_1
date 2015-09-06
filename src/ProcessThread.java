@@ -30,7 +30,13 @@ import java.util.logging.Logger;
         // ask to access the aircraft
         signaler.Wait(request.agent);
         
-        // process the request
+            try {
+                // process the request
+
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ProcessThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
         logger.logEnter(request.agent);
         if (request.rORc == reqType.REQUEST) {
