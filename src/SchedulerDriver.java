@@ -38,23 +38,6 @@ public class SchedulerDriver {
     }
     
     static void tickLoop(){
-<<<<<<< HEAD
-        int tickNum = 0;
-        while(q.size() ! = 0 || input.size() > 0){
-            for(int i = 0; i < input.size(); i++){
-                if(input.get(i).arrivalTime <= tickNum){
-                    q.push(input.get(i));
-                    input.set(i, null);
-                }
-            }
-            while(input.remove(null)){
-            }
-            if(!q.tick()){
-                if(input.isEmpty()){
-                    break;
-                }
-            }
-=======
 	int tickNum = 0;
 	while(q.size()!=0 || input.size()>0){
 	    for(int i=0;i<input.size();i++){
@@ -68,7 +51,6 @@ public class SchedulerDriver {
 	    if(!q.tick() && input.isEmpty()){
                 break;
 	    }
->>>>>>> 95b70c27f5d271550948e1e3e8f75131e9362e37
             tickNum++;
         }
         
