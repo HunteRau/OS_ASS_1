@@ -38,24 +38,24 @@ public class SchedulerDriver {
     }
     
     static void tickLoop(){
-	int tickNum = 1;
-	while(q.size()!=0 || input.size()>0){
-	    for(int i=0;i<input.size();i++){
-		if(input.get(i).arrivalTime <= tickNum){
-		    q.push(input.get(i));
-		    input.set(i, null);
-		}
-	    }
-	    while(input.remove(null)){
+        int tickNum = 0;
+        while(q.size() ! = 0 || input.size() > 0){
+            for(int i = 0; i < input.size(); i++){
+                if(input.get(i).arrivalTime <= tickNum){
+                    q.push(input.get(i));
+                    input.set(i, null);
+                }
             }
-	    if(!q.tick()){
-		if(input.isEmpty()){
+            while(input.remove(null)){
+            }
+            if(!q.tick()){
+                if(input.isEmpty()){
                     break;
                 }
-	    }
+            }
             tickNum++;
-	}
-    
+        }
+        
         // look at list and process left overs
         q.logFailures();
     }
