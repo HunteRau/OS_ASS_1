@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 /**
- *
- * @author Hayden
+ * @author Hayden Russell a1606924
+ * @author Aaron Hunter a1627530
  */
 
 public class Request{
-    
     public int agent;
     public reqType rORc;
     public seatType type;
@@ -19,8 +11,8 @@ public class Request{
     public int arrivalTime;
     
     public Request(String s){	
-	String tokens[] = s.split(" ");
-	String temp = tokens[0];
+        String tokens[] = s.split(" ");
+        String temp = tokens[0];
         agent = Integer.parseInt(temp.substring(temp.length()-1));
         switch(tokens[1]){
             case "R":

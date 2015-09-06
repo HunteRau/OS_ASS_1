@@ -1,14 +1,13 @@
-
-import java.util.List;
-
 /**
- *
- * @author Aaron
+ * @author Hayden Russell a1606924
+ * @author Aaron Hunter a1627530
  */
+ 
+ import java.util.List;
  
  class OutputLogger {
 	public void logAdmitBatch(List<Request> requests) {
-		// create a string first
+		// log = "Admit a batch (Agent 3, Agent 4 ...)"
 		StringBuilder builder = new StringBuilder();
 		for (Request  r : requests) {
 			builder.append("Agent " + Integer.toString(r.agent) + ", ");
@@ -20,6 +19,7 @@ import java.util.List;
 	}
 	
 	public void logWait(int agent, int semaphoreState) {
+        // log = "Agent x executes wait operation, semaphore = y"
         synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
                 + " executes wait operation, semaphore = "
@@ -28,6 +28,7 @@ import java.util.List;
 	}
     
     public void logEnter(int agent) {
+        // log = "Agent x enters the system"
         synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
                     + " enters the system");
@@ -35,6 +36,7 @@ import java.util.List;
     }
     
     public void logExit(int agent) {
+        // log = "Agent x exits the system"
         synchronized (this) {
             System.out.println("Agent "+ Integer.toString(agent) 
                 + " exits the system");
@@ -42,6 +44,7 @@ import java.util.List;
     }
 	
 	public void logSignal(int agent, int semaphoreState) {
+        // log = "Agent x executes signal operation, semaphore = y"
         synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
                 + " executes signal operation, semaphore = "
@@ -50,7 +53,7 @@ import java.util.List;
 	}
 	
 	public void logRequest(Request r) {
-		// log - "Agent x reserves y seat/s in CLASS"
+		// log = "Agent x reserves y seat(s) in CLASS"
 		StringBuilder builder = new StringBuilder();
 		builder.append("Agent ");
 		builder.append(Integer.toString(r.agent) + " ");

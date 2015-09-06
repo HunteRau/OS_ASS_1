@@ -1,17 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author Hayden Russell a1606924
+ * @author Aaron Hunter a1627530
  */
 
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
- 
-/**
- *
- * @author Aaron
- */
  
  class ProcessThread extends Thread {
 	private Request request;

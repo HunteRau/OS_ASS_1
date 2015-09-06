@@ -1,4 +1,7 @@
-
+/**
+ * @author Hayden Russell a1606924
+ * @author Aaron Hunter a1627530
+ */
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,15 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-/**
- *
- * @author Hayden & Aaron
- */
  
-// TODO: 	-tick the queue where 1 tick is 1 time unit.
-//			-after enough time units has passed for the request, push the request 
-//				to the queue
 public class SchedulerDriver {
     
     static List<Request> input;

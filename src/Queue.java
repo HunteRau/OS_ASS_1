@@ -1,20 +1,16 @@
-
-import java.util.ArrayList;
-import java.util.List;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * The Queue class which maintains a queue of requests to be processed by the aircraft. 
+ * It is processed by calling a tick() function that returns false if nothing can be processed otherwise true.
+ * The requests are processed in separate threads to allow parallelism for request with the same priority
  */
 
 /**
- *
- * @author Aaron
+ * @author Hayden Russell a1606924
+ * @author Aaron Hunter a1627530
  */
- 
-// TODO:    - check to make sure that admit failures are logged
-//          - make sure that request that can't be processed are logged
+
+import java.util.ArrayList;
+import java.util.List;
  
 public class Queue {
 	private List<Request> list;
@@ -30,8 +26,9 @@ public class Queue {
 	}
 	
 	public void push(Request r) {
-		if (r.rORc == reqType.CANCEL) {
-			// push the cancel to the front of the queue
+        // push cancel request to the front of the queue so that seat availability is
+        // promptly reflected and less reservation requests fail.
+        if (r.rORc == reqType.CANCEL) {
 			list.add(0, r);
 		}else{
 		    list.add(r);
@@ -58,73 +55,23 @@ public class Queue {
 		return list.size();
 	}
 	
-	// return true if at least 1 request is processed
-	// return false if 0 requests are processed
 	public boolean tick() {
-		
+        // processes 1 request or x requests of the same priority and 
+        // pushes unprocessable request to the back of the queue
+		// returns: true if a request is still processable, else false
 		if (list.isEmpty()){
 			return false;
 		}
 		
-		// find out what the next batch is
-		Request r0 = list.get(0);
+		List<Request> batchList = calculateProcessBatch();
+        for(Request r: batchList){
+            list.remove(r);
+        }
 		
-		List<Request> batchList = new ArrayList<Request>();
-                if (r0.rORc == reqType.REQUEST) {
-                    // is there room?			
-                    if (aircraft.seatsNotTaken(r0.type) >= r0.seatNum) {
-                        batchList.add(r0);
-                        
-                        // is there more request we can fit in this batch
-                        int spareSeats = aircraft.seatsNotTaken(r0.type) - r0.seatNum;
-                        int i = 1;
-                        while (i < list.size() && spareSeats > 0) {
-                            Request rx = list.get(i);
-                            if (!(rx.rORc == r0.rORc && rx.type == r0.type && rx.seatNum == r0.seatNum)) {
-                                break;
-                            }
-                            spareSeats = spareSeats - rx.seatNum;
-                            
-                            if (spareSeats >= 0){				
-                                batchList.add(rx);
-                            }
-                            i++;
-                        }
-                        for(Request r: batchList){
-                            list.remove(r);
-                        }
-                    }else{                            
-                        // push the failed request to the end of the queue
-                        this.pop();
-                        this.push(r0);
-                    }
-                } else if (r0.rORc == reqType.CANCEL) {
-			batchList.add(r0);
-			
-			// find more requests that we can fit in this batch
-			int i = 1;
-			while (i < list.size()) {
-				Request rx = list.get(i);
-				if (!(rx.rORc == r0.rORc)) {
-					break;
-				}				
-
-				batchList.add(rx);
-                i++;
-			}
-                        for(Request r: batchList){
-                            list.remove(r);
-                        }
-		}
-		
-		// check if there is any requests to process
-		if (batchList.isEmpty()){
-			return false;
-		}else{
+		if (!batchList.isEmpty()){
 			logger.logAdmitBatch(batchList);
 		}
 		
-        // create threads
         List<ProcessThread> threadList = new ArrayList<ProcessThread>();
         for (Request r : batchList) {
             ProcessThread p = new ProcessThread(r, aircraft, semaphore, logger);
@@ -140,10 +87,10 @@ public class Queue {
             }
         }
         
-        
-        int over = 0;
-        while(over<list.size()){
-            r0 = list.get(0);
+        // push unprocessable requests to the end of the queue
+        int iter = 0;
+        while(iter<list.size()){
+            Request r0 = list.get(0);
             if(r0.rORc == reqType.CANCEL){
                 break;
             }
@@ -153,9 +100,53 @@ public class Queue {
             }else{
                 break;
             }
-            over++;
+            iter++;
         }
         
-	return true;
+        // if we stepped over the whole list; there isn't any processable requests
+        if (iter == list.size())
+            return false;
+        else 
+            return true;
 	}
+    
+    private List<Request> calculateProcessBatch() {
+        // returns a list of equivalent requests that are able to be processed in the aircraft
+        
+        List<Request> batchList = new ArrayList<Request>();
+        Request r0 = list.get(0);
+        if (r0.rORc == reqType.REQUEST) {		
+            if (aircraft.seatsNotTaken(r0.type) >= r0.seatNum) {
+                batchList.add(r0);
+                // search for more equivalent requests to put in the same batch
+                int spareSeats = aircraft.seatsNotTaken(r0.type) - r0.seatNum;
+                int i = 1;
+                while (i < list.size() && spareSeats > 0) {
+                    Request rx = list.get(i);
+                    if (!(rx.rORc == r0.rORc && rx.type == r0.type && rx.seatNum == r0.seatNum)) {
+                        // the request isn't equivalent
+                        break;
+                    }
+                    spareSeats = spareSeats - rx.seatNum;
+                    if (spareSeats >= 0){				
+                        batchList.add(rx);
+                    }
+                    i++;
+                }
+            }
+        } else if (r0.rORc == reqType.CANCEL) {
+			batchList.add(r0);
+			// search for more cancel requests to put in the same batch
+			int i = 1;
+			while (i < list.size()) {
+				Request rx = list.get(i);
+				if (!(rx.rORc == r0.rORc)) {
+					break;
+				}				
+				batchList.add(rx);
+                i++;
+			}
+		}
+        return batchList;
+    }
 }
