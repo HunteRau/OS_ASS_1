@@ -19,6 +19,7 @@ class Aircraft {
 	}
 	
 	public int seatsNotTaken(seatType type) {
+        // return the seats avaliable for option 'type'
 		if (type == seatType.FIRST) {
 			return firstClassSeats - firstClassSeatsFilled;
 		} else if (type == seatType.BUSINESS) {
@@ -29,6 +30,7 @@ class Aircraft {
 	}
 	
 	public boolean reserve(seatType type) {
+        // returns false if a seat of 'type' can't be reserved
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled < firstClassSeats) {
 				firstClassSeatsFilled++;
@@ -49,6 +51,7 @@ class Aircraft {
 	}
 	
 	public boolean reserve(seatType type, int numOfSeats) {
+        // returns false if the number of seats of 'type' can't be reserved
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled + numOfSeats <= firstClassSeats) {
 				firstClassSeatsFilled += numOfSeats;
@@ -69,6 +72,7 @@ class Aircraft {
 	}
 	
 	public void cancel(seatType type) {
+        // reallocated a seat of 'type' if there is one to reallocate
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled > 0) {
 				firstClassSeatsFilled--;
@@ -85,6 +89,7 @@ class Aircraft {
 	}
 	
 	public void cancel(seatType type, int numOfSeats) {
+        // reallocated 'numOfSeats' or as much as possible seats of 'type'
 		if (type == seatType.FIRST) {
 			if (firstClassSeatsFilled - numOfSeats >= 0) {
 				firstClassSeatsFilled -= numOfSeats;

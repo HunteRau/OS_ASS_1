@@ -34,15 +34,13 @@ import java.util.logging.Logger;
                 }
             }
         }
-        
-            try {
-                // process the request
-
-                Thread.sleep(1);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ProcessThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+        try {
+            // delay the process by 1ms so that all the threads can execute wait and log then before 
+            // an agent enters the system so that the output is correct with what is expected
+            Thread.sleep(1);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ProcessThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
         logger.logEnter(request.agent);
         if (request.rORc == reqType.REQUEST) {
             if (aircraft.reserve(request.type, request.seatNum)) 

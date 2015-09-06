@@ -1,4 +1,11 @@
 /**
+ * SchedulerDriver is the driver class for the system.
+ * It passes the process the input into request objects and sorts them.
+ * Then it then simulates time and passes the requests into the queue once the correct
+ * time occurs.
+ */
+
+/**
  * @author Hayden Russell a1606924
  * @author Aaron Hunter a1627530
  */
@@ -26,45 +33,50 @@ public class SchedulerDriver {
 			fName = args[0];
 		}
 		readIn(fName);
-		//printLists();
 		
-		tickLoop();
-		
+		tickLoop();	
     }
     
     static void tickLoop(){
 	int tickNum = 0;
+    // process one tick
 	while(q.size()!=0 || input.size()>0){
-	    for(int i=0;i<input.size();i++){
-		if(input.get(i).arrivalTime <= tickNum){
-		    q.push(input.get(i));
-		    input.set(i, null);
-		}
-	    }
-	    while(input.remove(null)){
+        // push requests at current time
+        for(int i=0;i<input.size();i++){
+            if(input.get(i).arrivalTime <= tickNum){
+                q.push(input.get(i));
+                input.set(i, null);
             }
-	    if(!q.tick() && input.isEmpty()){
+        }
+        // remove empty request pushed into the queue from the input list
+        while(input.remove(null)){
+        }
+
+        // process the queue
+        if(!q.tick() && input.isEmpty()){
                 break;
-	    }
+        }
             tickNum++;
         }
-        
-        // look at list and process left overs
+
+        // log any requests that couldn't process
         q.logFailures();
     }
     
     static void printLists(){	
-	for (Request r : input) {
-	    System.out.println(r.toString());
-	}
-	Collections.sort(input,new RequestComparator());
-	System.out.println("---------------------------------------");
-	for (Request r : input) {
-	    System.out.println(r.toString());
-	}
+        // print the request, sort the request then print them again to test sorting
+        for (Request r : input) {
+            System.out.println(r.toString());
+        }
+        Collections.sort(input,new RequestComparator());
+        System.out.println("---------------------------------------");
+        for (Request r : input) {
+            System.out.println(r.toString());
+        }
     }
     
     static void readIn(String fileName){
+        // read in a file and process the commands to requests
 		try{
 			BufferedReader bufferRead = new BufferedReader(new FileReader(fileName));
 			String s;

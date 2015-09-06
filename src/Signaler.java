@@ -1,4 +1,9 @@
 /**
+ * The Signaler is a semaphore that only allows 1 thread to execute at a time
+ * Wait returns true if the thread should wait otherwise it returns false
+ */
+
+/**
  * @author Hayden Russell a1606924
  * @author Aaron Hunter a1627530
  */
@@ -23,6 +28,7 @@ public class Signaler {
     }
     
     public synchronized boolean Wait(int agent){
+        // return true if the thread should wait else false
         synchronized (sigNum_lock) {
             sigNum--;
             logger.logWait(agent, sigNum);
