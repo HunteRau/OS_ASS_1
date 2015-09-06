@@ -109,6 +109,12 @@ public class Queue {
 		
 		// check if there is any requests to process
 		if (batchList.isEmpty()){
+            if (list.size() == 0) {
+                // push the failed request to the end of the queue
+                Request r = list.get(0);
+                this.pop();
+                this.push(r);
+            }
 			return false;
 		}else{
 			logger.logAdmitBatch(batchList);
