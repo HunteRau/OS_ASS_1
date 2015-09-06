@@ -33,9 +33,7 @@ public class Signaler {
             sigNum--;
             logger.logWait(agent, sigNum);
             if(sigNum<0){
-                synchronized (threadQueue) {
-                    threadQueue.add(Thread.currentThread());
-                }
+                threadQueue.add(Thread.currentThread());
                 return false;
             }
             return true;
