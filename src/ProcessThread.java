@@ -5,6 +5,8 @@
  */
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
  
 /**
  *
@@ -16,6 +18,7 @@ import java.util.List;
 	private Signaler signaler;
 	private OutputLogger logger;
     private Aircraft aircraft;
+
 	public ProcessThread(Request r, Aircraft a, Signaler s, OutputLogger l) {
         this.request = new Request(r);
         this.signaler = s;
@@ -27,7 +30,14 @@ import java.util.List;
         // ask to access the aircraft
         signaler.Wait(request.agent);
         
-        // process the request
+            try {
+                // process the request
+
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ProcessThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
         logger.logEnter(request.agent);
         if (request.rORc == reqType.REQUEST) {
             if (aircraft.reserve(request.type, request.seatNum)) 
@@ -38,9 +48,9 @@ import java.util.List;
             aircraft.cancel(request.type, request.seatNum);
             logger.logRequest(request);
         }
-        logger.logExit(request.agent);
         
         // signal exiting so others can come
         signaler.Signal(request.agent);
+        logger.logExit(request.agent);
     }
  }

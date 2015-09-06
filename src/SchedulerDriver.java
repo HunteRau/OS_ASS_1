@@ -31,7 +31,7 @@ public class SchedulerDriver {
 			fName = args[0];
 		}
 		readIn(fName);
-		printLists();
+		//printLists();
 		
 		tickLoop();
 		

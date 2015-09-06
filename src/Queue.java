@@ -69,28 +69,30 @@ public class Queue {
 		// find out what the next batch is
 		Request r0 = list.get(0);
 		
-		List<Request> offlineList = new ArrayList<Request>();
+		List<Request> batchList = new ArrayList<Request>();
 		if (r0.rORc == reqType.REQUEST) {
 			// is there room?			
 			if (aircraft.seatsNotTaken(r0.type) >= r0.seatNum) {
-				offlineList.add(r0);
+				batchList.add(r0);
 				
 				// is there more request we can fit in this batch
 				int spareSeats = aircraft.seatsNotTaken(r0.type) - r0.seatNum;
 				int i = 1;
 				while (i < list.size() && spareSeats > 0) {
 					Request rx = list.get(i);
-					if (!(rx.rORc == r0.rORc && rx.type == r0.type)) {
+					if (!(rx.rORc == r0.rORc && rx.type == r0.type && rx.seatNum == r0.seatNum)) {
 						break;
 					}
 					spareSeats = spareSeats - rx.seatNum;
-					if (spareSeats >= 0)					
-						offlineList.add(rx);
+
+					if (spareSeats >= 0){				
+						batchList.add(rx);
+                    }
                     i++;
 				}
 			} 
 		} else if (r0.rORc == reqType.CANCEL) {
-			offlineList.add(r0);
+			batchList.add(r0);
 			
 			// find more requests that we can fit in this batch
 			int i = 1;
@@ -99,21 +101,22 @@ public class Queue {
 				if (!(rx.rORc == r0.rORc)) {
 					break;
 				}				
-				offlineList.add(rx);
+
+				batchList.add(rx);
                 i++;
 			}
 		}
 		
 		// check if there is any requests to process
-		if (offlineList.isEmpty()){
+		if (batchList.isEmpty()){
 			return false;
 		}else{
-			logger.logAdmitBatch(offlineList);
+			logger.logAdmitBatch(batchList);
 		}
 		
         // create threads
         List<ProcessThread> threadList = new ArrayList<ProcessThread>();
-        for (Request r : offlineList) {
+        for (Request r : batchList) {
             ProcessThread p = new ProcessThread(r, aircraft, semaphore, logger);
             threadList.add(p);
             p.start();
@@ -129,7 +132,8 @@ public class Queue {
  
         // pop requests completed requests from list
         // could do this in a better manner
-        for (int i = 0; i < offlineList.size(); i++) {
+
+        for (int i = 0; i < batchList.size(); i++) {
             this.pop();
         }       
 		return true;
