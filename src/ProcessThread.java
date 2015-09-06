@@ -16,7 +16,8 @@ import java.util.List;
 	private Signaler signaler;
 	private OutputLogger logger;
     private Aircraft aircraft;
-	public void ProcessThread(Request r, Aircraft a, Signaler s, OutputLogger l) {
+    
+	public ProcessThread(Request r, Aircraft a, Signaler s, OutputLogger l) {
         this.request = new Request(r);
         this.signaler = s;
         this.logger = l;

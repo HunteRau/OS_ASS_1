@@ -4,7 +4,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
 import java.util.Collections;
-import java.util.Collections.synchronizedList;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,6 +19,7 @@ public class Signaler {
     
     private OutputLogger logger;
     private int sigNum;
+    private final Object sigNum_lock = new Object();
     private List<Thread> threadQueue;
     
     public Signaler(OutputLogger l) {
@@ -29,7 +29,7 @@ public class Signaler {
     }
     
     public synchronized void Wait(int agent){
-    synchronized (sigNum) {
+    synchronized (sigNum_lock) {
         sigNum--;
     }
     logger.logWait(agent, sigNum);
@@ -46,7 +46,7 @@ public class Signaler {
     }
     
     public synchronized void Signal(int agent){
-	synchronized (sigNum) {
+	synchronized (sigNum_lock) {
         if (sigNum < 1)
             sigNum++;
     }
@@ -60,7 +60,7 @@ public class Signaler {
     }
     
     public int sigNum() {
-        synchronized (sigNum) {
+        synchronized (sigNum_lock) {
             return sigNum;
         }
     }

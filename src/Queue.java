@@ -114,7 +114,7 @@ public class Queue {
         
         // pop requests completed requests from list
         // could do this in a better manner
-        for (int i = 0; i < offlineList; i++) {
+        for (int i = 0; i < offlineList.size(); i++) {
             this.pop();
         }       
 		return true;
