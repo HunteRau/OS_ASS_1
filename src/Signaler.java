@@ -28,38 +28,34 @@ public class Signaler {
         threadQueue = Collections.synchronizedList(new ArrayList<Thread>());
     }
     
-    public synchronized void Wait(int agent){
+    public synchronized boolean Wait(int agent){
         synchronized (sigNum_lock) {
             sigNum--;
-        }
-        logger.logWait(agent, sigNum);
-        if(sigNum<0){
-            synchronized (threadQueue) {
-                threadQueue.add(Thread.currentThread());
-            }
-            synchronized(Thread.currentThread()){
-                try {
-                    Thread.currentThread().wait();
-                } catch (Exception ex) {
-                    Logger.getLogger(Signaler.class.getName()).log(Level.SEVERE, null, ex);
-                    Logger.getLogger(ex.getLocalizedMessage());
+            logger.logWait(agent, sigNum);
+            if(sigNum<0){
+                synchronized (threadQueue) {
+                    threadQueue.add(Thread.currentThread());
                 }
+                return false;
             }
+            return true;
         }
     }
     
     public synchronized void Signal(int agent){
-	synchronized (sigNum_lock) {
-        if (sigNum < 1)
-            sigNum++;
-    }
-    logger.logSignal(agent, sigNum);
-	if(sigNum<=0){
-        synchronized (threadQueue) {
-            threadQueue.get(0).notify();
-            threadQueue.remove(0);
+        synchronized (sigNum_lock) {
+            if (sigNum < 1)
+                sigNum++;
+            logger.logSignal(agent, sigNum);
+            synchronized (threadQueue) {
+                if(sigNum<=0 || !threadQueue.isEmpty()){
+                    synchronized(threadQueue.get(0)){
+                        threadQueue.get(0).notify();
+                        threadQueue.remove(0);
+                    }
+                }
+            }
         }
-	}
     }
     
     public int sigNum() {
@@ -67,5 +63,4 @@ public class Signaler {
             return sigNum;
         }
     }
-    
 }
