@@ -5,6 +5,8 @@
  */
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
  
 /**
  *
@@ -29,6 +31,7 @@ import java.util.List;
         signaler.Wait(request.agent);
         
         // process the request
+        
         logger.logEnter(request.agent);
         if (request.rORc == reqType.REQUEST) {
             if (aircraft.reserve(request.type, request.seatNum)) 
@@ -39,9 +42,9 @@ import java.util.List;
             aircraft.cancel(request.type, request.seatNum);
             logger.logRequest(request);
         }
-        logger.logExit(request.agent);
         
         // signal exiting so others can come
         signaler.Signal(request.agent);
+        logger.logExit(request.agent);
     }
  }

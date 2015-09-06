@@ -22,7 +22,7 @@ import java.util.List;
 	public void logWait(int agent, int semaphoreState) {
         synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
-                + "executes wait operation, semaphore = "
+                + " executes wait operation, semaphore = "
                 + Integer.toString(semaphoreState));
         }
 	}
@@ -44,7 +44,7 @@ import java.util.List;
 	public void logSignal(int agent, int semaphoreState) {
         synchronized (this) {
             System.out.println("Agent " + Integer.toString(agent) 
-                + "executes signal operation, semaphore = "
+                + " executes signal operation, semaphore = "
                 + Integer.toString(semaphoreState));
         }
 	}
