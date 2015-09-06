@@ -70,28 +70,35 @@ public class Queue {
 		Request r0 = list.get(0);
 		
 		List<Request> batchList = new ArrayList<Request>();
-		if (r0.rORc == reqType.REQUEST) {
-			// is there room?			
-			if (aircraft.seatsNotTaken(r0.type) >= r0.seatNum) {
-				batchList.add(r0);
-				
-				// is there more request we can fit in this batch
-				int spareSeats = aircraft.seatsNotTaken(r0.type) - r0.seatNum;
-				int i = 1;
-				while (i < list.size() && spareSeats > 0) {
-					Request rx = list.get(i);
-					if (!(rx.rORc == r0.rORc && rx.type == r0.type && rx.seatNum == r0.seatNum)) {
-						break;
-					}
-					spareSeats = spareSeats - rx.seatNum;
-
-					if (spareSeats >= 0){				
-						batchList.add(rx);
+                if (r0.rORc == reqType.REQUEST) {
+                    // is there room?			
+                    if (aircraft.seatsNotTaken(r0.type) >= r0.seatNum) {
+                        batchList.add(r0);
+                        
+                        // is there more request we can fit in this batch
+                        int spareSeats = aircraft.seatsNotTaken(r0.type) - r0.seatNum;
+                        int i = 1;
+                        while (i < list.size() && spareSeats > 0) {
+                            Request rx = list.get(i);
+                            if (!(rx.rORc == r0.rORc && rx.type == r0.type && rx.seatNum == r0.seatNum)) {
+                                break;
+                            }
+                            spareSeats = spareSeats - rx.seatNum;
+                            
+                            if (spareSeats >= 0){				
+                                batchList.add(rx);
+                            }
+                            i++;
+                        }
+                        for(Request r: batchList){
+                            list.remove(r);
+                        }
+                    }else{                            
+                        // push the failed request to the end of the queue
+                        this.pop();
+                        this.push(r0);
                     }
-                    i++;
-				}
-			} 
-		} else if (r0.rORc == reqType.CANCEL) {
+                } else if (r0.rORc == reqType.CANCEL) {
 			batchList.add(r0);
 			
 			// find more requests that we can fit in this batch
@@ -105,15 +112,14 @@ public class Queue {
 				batchList.add(rx);
                 i++;
 			}
+                        for(Request r: batchList){
+                            list.remove(r);
+                        }
 		}
 		
 		// check if there is any requests to process
 		if (batchList.isEmpty()){
-            if (list.size() == 0) {
-                // push the failed request to the end of the queue
-                Request r = list.get(0);
-                this.pop();
-                this.push(r);
+            if (list.size() != 0) {
             }
 			return false;
 		}else{
@@ -135,13 +141,26 @@ public class Queue {
                 System.out.println("Main thread Interrupted");
             }
         }
- 
-        // pop requests completed requests from list
-        // could do this in a better manner
-
-        for (int i = 0; i < batchList.size(); i++) {
-            this.pop();
-        }       
-		return true;
+        
+        
+        boolean accom=false;
+        int over = 0;
+        while(!accom && over<list.size()){
+            r0 = list.get(0);
+            if(r0.rORc == reqType.CANCEL){
+                accom = true;
+                over++;
+                continue;
+            }
+            if (aircraft.seatsNotTaken(r0.type) < r0.seatNum) {
+                this.pop();
+                this.push(r0);
+            }else{
+                accom=true;
+            }
+            over++;
+        }
+        
+	return true;
 	}
 }
