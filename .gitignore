@@ -11,3 +11,4 @@ build/classes/.netbeans_update_resources
 *.class
 /build/
 /nbproject/
+out

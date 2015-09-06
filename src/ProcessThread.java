@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import java.util.List;
+ 
 /**
  *
  * @author Aaron
@@ -23,22 +25,22 @@
     
     public void run() {
         // ask to access the aircraft
-        int simNum = signaler.Wait();
+        signaler.Wait(request.agent);
         
         // process the request
         logger.logEnter(request.agent);
         if (request.rORc == reqType.REQUEST) {
-            if (aircraft.reserve(request.type, seatNum)) 
+            if (aircraft.reserve(request.type, request.seatNum)) 
                 logger.logRequest(request);
             else
                 logger.logReservationFailure(request.agent);
-        } else (request.rORc == reqType.CANCEL) {
-            aircraft.cancel(request.type, seatNum);
-            logger.logRequest(request)
+        } else if (request.rORc == reqType.CANCEL) {
+            aircraft.cancel(request.type, request.seatNum);
+            logger.logRequest(request);
         }
         logger.logExit(request.agent);
         
         // signal exiting so others can come
-        simNum = signaler.Signal();
+        signaler.Signal(request.agent);
     }
  }

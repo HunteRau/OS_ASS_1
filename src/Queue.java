@@ -100,7 +100,7 @@ public class Queue {
 		}
 		
         // create threads
-        List<RequestThread> threadList = new ArrayList<Request>();
+        List<ProcessThread> threadList = new ArrayList<ProcessThread>();
         for (Request r : offlineList) {
             ProcessThread p = new ProcessThread(r, aircraft, semaphore, logger);
             threadList.add(p);
