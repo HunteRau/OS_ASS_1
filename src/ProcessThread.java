@@ -28,7 +28,18 @@ import java.util.logging.Logger;
     
     public void run() {
         // ask to access the aircraft
-        signaler.Wait(request.agent);
+        Boolean w = signaler.Wait(request.agent);
+        
+        if(!w){
+            synchronized(Thread.currentThread()){
+                try {
+                    Thread.currentThread().wait();
+                } catch (Exception ex) {
+                    Logger.getLogger(Signaler.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ex.getLocalizedMessage());
+                }
+            }
+        }
         
             try {
                 // process the request
