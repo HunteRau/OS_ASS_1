@@ -49,7 +49,7 @@ public class SchedulerDriver {
 	    while(input.remove(null)){
             }
 	    if(!q.tick()){
-		if(q.size()==0 && input.isEmpty()){
+		if(input.isEmpty()){
                     break;
                 }
 	    }

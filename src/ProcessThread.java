@@ -44,7 +44,7 @@ import java.util.logging.Logger;
             try {
                 // process the request
 
-                Thread.sleep(1000);
+                Thread.sleep(1);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ProcessThread.class.getName()).log(Level.SEVERE, null, ex);
             }
