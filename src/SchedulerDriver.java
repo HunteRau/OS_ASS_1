@@ -46,10 +46,12 @@ public class SchedulerDriver {
 		    input.set(i, null);
 		}
 	    }
-	    while(input.remove(null)){}
+	    while(input.remove(null)){
+            }
 	    if(!q.tick()){
 		break;
 	    }
+            tickNum++;
 	}
     
         // look at list and process left overs
