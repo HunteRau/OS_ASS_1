@@ -33,7 +33,7 @@ public class SchedulerDriver {
 			fName = args[0];
 		}
 		readIn(fName);
-		
+		Collections.sort(input,new RequestComparator());
 		tickLoop();	
     }
     
