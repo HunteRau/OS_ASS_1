@@ -41,7 +41,7 @@ public class SchedulerDriver {
 	int tickNum = 0;
     // process one tick
 	while(q.size()!=0 || input.size()>0){
-        // push requests at current time
+        // push requests at current or past time
         for(int i=0;i<input.size();i++){
             if(input.get(i).arrivalTime <= tickNum){
                 q.push(input.get(i));
@@ -56,8 +56,12 @@ public class SchedulerDriver {
         if(!q.tick() && input.isEmpty()){
                 break;
         }
-            tickNum++;
-        }
+            // if nothing was processed increment the time by 1 to avoid a dead lock
+            if (q.getLastTickDuration() != 0)
+                tickNum = tickNum + q.getLastTickDuration();
+            else 
+                tickNum++;
+    }
 
         // log any requests that couldn't process
         q.logFailures();

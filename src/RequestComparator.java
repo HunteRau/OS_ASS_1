@@ -41,5 +41,4 @@ public class RequestComparator implements Comparator<Request>{
 		}
 		return 0;
     }
-    
 }

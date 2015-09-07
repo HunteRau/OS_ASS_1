@@ -90,5 +90,4 @@ public class Request{
 		ans = ans.concat(" " + Integer.toString(arrivalTime));
 		return ans;
     }
-    
 }
