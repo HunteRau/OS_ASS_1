@@ -103,6 +103,7 @@ public class Queue {
                     } else {
                         batchList.add(rx);
                     }
+                    i++;
                 }
             } else if (r0.rORc == reqType.REQUEST) {
                 // loop from the position of r0+1 to list.size() checking for equivalents
